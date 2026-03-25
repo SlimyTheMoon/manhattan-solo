@@ -5,7 +5,8 @@ WORKDIR /app
 
 # Install project dependencies and build tools
 COPY package.json package-lock.json* ./
-RUN npm ci
+# npm ci requires package-lock.json; fallback to npm install if none.
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
 # Copy project source and build app
 COPY . .
